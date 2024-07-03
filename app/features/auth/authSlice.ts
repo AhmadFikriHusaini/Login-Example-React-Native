@@ -18,9 +18,14 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(login.fulfilled, (state, action) => {
-                state.isLogin = true;
-                state.status = 'success';
-                SecureStorage.setItem('token', action.payload.token)
+                if (action.payload.errorcode) {
+                    state.status = 'failed';
+                    state.error = action.payload.error;
+                } else {
+                    state.isLogin = true;
+                    state.status = 'success';
+                    SecureStorage.setItemAsync('token', action.payload.token);
+                }
             })
             .addCase(login.pending, (state) => {
                 state.status = 'loading';
@@ -28,7 +33,6 @@ const authSlice = createSlice({
             .addCase(login.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message ?? "something went wrong";
-            
         })
     }
 })

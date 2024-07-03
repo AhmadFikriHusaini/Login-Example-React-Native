@@ -1,4 +1,4 @@
-import { Pressable, Text, TextInput } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 import SafeArea from "../components/SafeArea";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -20,12 +20,13 @@ const Login = () => {
   };
   return (
     <SafeArea>
-      <Text>Status : {auth.status}</Text>
-      <Text>
-        {SecureStorage.getItem("token") !== undefined
-          ? SecureStorage.getItem("token")
-          : "no token"}
-      </Text>
+      <View>
+        {auth.status === "failed" ? (
+          <Text>{auth.error}</Text>
+        ) : (
+          <Text>{auth.status}</Text>
+        )}
+      </View>
       <Text>Login</Text>
       <TextInput
         className="border my-2 p-2"
